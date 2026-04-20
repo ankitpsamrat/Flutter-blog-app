@@ -1,3 +1,4 @@
+import 'package:blog_app/core/error/exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthRemoteDataSource {
@@ -16,7 +17,7 @@ abstract interface class AuthRemoteDataSource {
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final SupabaseClient supabaseClient;
 
-  AuthRemoteDataSourceImpl({required this.supabaseClient});
+  const AuthRemoteDataSourceImpl({required this.supabaseClient});
 
   @override
   Future<String> signInWithEmailPassword({
@@ -32,8 +33,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String name,
     required String email,
     required String password,
-  }) {
-    // TODO: implement signUpWithEmailPassword
-    throw UnimplementedError();
+  }) async {
+    try {
+      final response = await supabaseClient.auth.signUp(
+        email: email,
+        password: password,
+        data: {'name': name},
+      );
+
+      if (response.user == null) {
+        throw const ServerException('User registration failed');
+      }
+
+      return response.user!.id;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
   }
 }
