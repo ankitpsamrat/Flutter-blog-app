@@ -9,17 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
 
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => serviceLocator<AuthBloc>()),
-        // BlocProvider(
-        //   create: (context) => SubjectBloc(),
-        // ),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -28,11 +18,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Blog App',
-      theme: AppTheme.darkThemeMode,
-      home: SigninPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => serviceLocator<AuthBloc>()),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Blog App',
+        theme: AppTheme.darkThemeMode,
+        home: SigninPage(),
+      ),
     );
   }
 }
