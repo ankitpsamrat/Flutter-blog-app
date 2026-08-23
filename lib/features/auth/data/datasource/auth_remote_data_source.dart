@@ -3,6 +3,8 @@ import 'package:blog_app/features/auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class AuthRemoteDataSource {
+  Session? get currentUserSession;
+
   Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
@@ -13,6 +15,8 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<UserModel?> getCurrentUserData();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -21,12 +25,27 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   const AuthRemoteDataSourceImpl({required this.supabaseClient});
 
   @override
+  Session? get currentUserSession => supabaseClient.auth.currentSession;
+
+  @override
   Future<UserModel> signInWithEmailPassword({
     required String email,
     required String password,
-  }) {
-    // TODO: implement signInWithEmailPassword
-    throw UnimplementedError();
+  }) async {
+    try {
+      final response = await supabaseClient.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      if (response.user == null) {
+        throw const ServerException('User sign-in failed');
+      }
+
+      return UserModel.fromJson(response.user!.toJson());
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
   }
 
   @override
@@ -47,6 +66,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       return UserModel.fromJson(response.user!.toJson());
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel?> getCurrentUserData() async {
+    try {
+      // final user = await supabaseClient
+      //     .from('profiles')
+      //     .select()
+      //     .eq('id', currentUserSession?.user.id)
+      //     .single()
+      //     .execute();
+
+      // if (user == null) {
+      //   return null;
+      // }
+
+      // return UserModel.fromJson(user.toJson());
     } catch (e) {
       throw ServerException(e.toString());
     }
