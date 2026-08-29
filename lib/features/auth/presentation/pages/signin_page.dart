@@ -3,7 +3,7 @@ import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
-import 'package:blog_app/features/auth/presentation/widgets/custom_text_field.dart';
+import 'package:blog_app/core/common/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,8 +44,6 @@ class _SigninPageState extends State<SigninPage> {
               showSnackBar(context, state.message);
             } else if (state is AuthSuccess) {
               showSnackBar(context, 'Logged in successfully!');
-              // Navigate to sign in or home
-              Navigator.pushReplacement(context, SigninPage.route());
             }
           },
           builder: (context, state) {
