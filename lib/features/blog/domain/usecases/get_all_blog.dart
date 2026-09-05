@@ -1,0 +1,16 @@
+import 'package:blog_app/core/error/failure.dart';
+import 'package:blog_app/core/usecase/usecase.dart';
+import 'package:blog_app/features/blog/domain/entities/blog.dart';
+import 'package:blog_app/features/blog/domain/repository/blog_repository.dart';
+import 'package:fpdart/fpdart.dart';
+
+class GetAllBlog implements UseCase<List<Blog>, NoParams> {
+  final BlogRepository bogRepository;
+
+  GetAllBlog(this.bogRepository);
+
+  @override
+  Future<Either<Failure, List<Blog>>> call(NoParams params) async {
+    return bogRepository.getAllBlogs();
+  }
+}

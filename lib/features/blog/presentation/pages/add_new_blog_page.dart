@@ -46,7 +46,6 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           topics: _selectedTopics,
         ),
       );
-      // log(posterId);
     }
   }
 
@@ -77,7 +76,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           if (state is BlogFailure) {
             debugPrint(state.error);
             showSnackBar(context, state.error);
-          } else if (state is BlogSuccess) {
+          } else if (state is BlogUploadSuccess) {
             showSnackBar(context, 'Blog Posted Successfully');
             Navigator.pushAndRemoveUntil(
               context,
