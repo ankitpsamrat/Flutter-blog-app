@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 class BlogPage extends StatelessWidget {
   const BlogPage({super.key});
 
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => BlogPage());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
